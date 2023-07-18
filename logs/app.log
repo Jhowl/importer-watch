@@ -1,0 +1,277 @@
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:42:32.076Z'
+}
+{
+  message: 'Last match id 7234584339',
+  level: 'info',
+  timestamp: '2023-07-18T18:42:32.077Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:43:32.076Z'
+}
+{
+  message: 'Last match id 7234584339',
+  level: 'info',
+  timestamp: '2023-07-18T18:43:32.076Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:44:30.821Z'
+}
+{
+  message: 'Make first import',
+  level: 'info',
+  timestamp: '2023-07-18T18:44:30.828Z'
+}
+{
+  message: 'First import already done',
+  level: 'info',
+  timestamp: '2023-07-18T18:44:30.887Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:44:51.930Z'
+}
+{
+  message: 'Make first import',
+  level: 'info',
+  timestamp: '2023-07-18T18:44:51.934Z'
+}
+{
+  message: 'First import already done',
+  level: 'info',
+  timestamp: '2023-07-18T18:44:51.981Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:44:59.963Z'
+}
+{
+  message: 'Make first import',
+  level: 'info',
+  timestamp: '2023-07-18T18:44:59.968Z'
+}
+{
+  message: 'First import already done',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:00.027Z'
+}
+{ level: 'error', timestamp: '2023-07-18T18:45:21.880Z' }
+{ level: 'error', timestamp: '2023-07-18T18:45:21.896Z' }
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:40.144Z'
+}
+{
+  message: 'Make first import',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:40.151Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:40.204Z'
+}
+{
+  message: 'First import already done',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:40.220Z'
+}
+{
+  message: 'Make first import',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:40.211Z'
+}
+{
+  message: 'First import already done',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:40.305Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:45.632Z'
+}
+{
+  message: 'Make first import',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:45.637Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:45.668Z'
+}
+{
+  message: 'Make first import',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:45.674Z'
+}
+{
+  message: 'First import already done',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:45.699Z'
+}
+{
+  message: 'First import already done',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:45.731Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:57.002Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:45:57.058Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:13.948Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:13.948Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:22.098Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:22.190Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:22.212Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:22.280Z'
+}
+{
+  message: 'Last match id 7234584339',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:22.213Z'
+}
+{
+  message: 'Last match id 7234584339',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:22.281Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:35.740Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:46:35.822Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:47:33.994Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:47:34.043Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:48:34.026Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:48:34.062Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:49:34.013Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:49:34.061Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:50:34.014Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:50:34.059Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:51:34.011Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:51:34.061Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:52:34.014Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:52:34.063Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:53:34.014Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:53:34.067Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:53:58.867Z'
+}
+{
+  message: 'Connected to database',
+  level: 'info',
+  timestamp: '2023-07-18T18:53:58.867Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:54:58.893Z'
+}
+{
+  message: 'Checking for new matches...',
+  level: 'info',
+  timestamp: '2023-07-18T18:54:58.895Z'
+}
