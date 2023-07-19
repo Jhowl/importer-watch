@@ -127,7 +127,7 @@ const watcher = async () => {
 };
 
 const start = async () => {
-  // await makeFirstImport();
+  await makeFirstImport();
   console.log(chalk.green("Starting watcher..."));
 
   setInterval(async () => {

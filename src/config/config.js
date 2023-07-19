@@ -12,6 +12,7 @@ export const select = `duration,
   matches.radiant_team_id,
   matches.dire_team_id,
   match_patch.patch,
+  objectives,
   leagues.leagueid AS leagueId,
   json_agg(json_build_object(
     'player_slot', player_matches.player_slot,
