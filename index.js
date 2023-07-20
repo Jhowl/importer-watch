@@ -110,7 +110,7 @@ const watcher = async () => {
 
     if (response.data.rows.length === 0) {
       console.log(chalk.yellow("No matches found"));
-      console.log(chalk.yellow("Waiting 1 minute..."));
+      console.log(chalk.yellow("Waiting 5 minutes..."));
 
       return false;
     }
@@ -139,7 +139,7 @@ const start = async () => {
 
   setInterval(async () => {
     await watcher();
-  }, 60 * 1000);
+  }, 60 * 1000 * 5);
 };
 
 const api = axios.create({
