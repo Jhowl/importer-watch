@@ -78,7 +78,12 @@ const watcher = async () => {
   logger.info("Checking for new matches...");
   console.log(chalk.yellow("Last match id: " + lastMatchId));
 
-  const where = `leagues.tier = 'premium'`;
+  const where = `
+    (
+      leagues.tier = 'premium'
+      OR leagues.leagueid = 15475
+    ) AND matches.match_id > ${lastMatchId}
+  `;
 
   const query = `
     SELECT
@@ -87,7 +92,6 @@ const watcher = async () => {
       ${from}
     WHERE
       ${where}
-      AND matches.match_id > ${lastMatchId}
     GROUP BY
       ${groupBy}
   `;
@@ -122,12 +126,15 @@ const watcher = async () => {
     logger.info("Watcher saved");
   } catch (error) {
     logger.error("Error in watcher");
+    console.log(error);
     return false;
   }
 };
 
 const start = async () => {
-  await makeFirstImport();
+  // await makeFirstImport();
+    await watcher();
+
   console.log(chalk.green("Starting watcher..."));
 
   setInterval(async () => {

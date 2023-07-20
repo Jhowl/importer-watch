@@ -23,8 +23,13 @@ class LeaguesController extends Controller {
 
   newLeague = async (matches) => {
     const leaguesIds = this.leaguesIdsFromMatches(matches)
-    const [league] = await this.find({ leagueId: leaguesIds[0] })
-    if (league) return false
+    const league = await this.find({ leagueId: { $in: leaguesIds } })
+    console.log(league)
+    if (league.length) {
+      console.log('league Already exists')
+      return false
+    }
+
     const leagues = await this.getLeaguesData(leaguesIds)
     if (!leagues.length) return false
     const response = await this.insertMany(leagues)
