@@ -12,7 +12,7 @@ class MatchesController extends Controller {
   }
 
   async saveMatches(matches) {
-    const matchNotInDB = await this.ValidateMatchsIsInDB(matches)
+    const matchNotInDB = await this.getMatchesNotInDB(matches)
     if (matchNotInDB.length === 0) return false
 
     const formatedMatches = matches.map(match => formatMatch(match))
