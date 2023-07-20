@@ -73,15 +73,17 @@ const makeFirstImport = async () => {
 };
 
 const watcher = async () => {
-  let matchesCurrentDay = await MController.getMatchesLastTreeHours();
-  const time = Math.floor( new Date().getTime() / 1000 ) - 60 * 60 * 3; // 3.5 hours
+  const time = 60 * 60 * 12
+  const timeUnix = Math.floor( new Date().getTime() / 1000 ) - time;
+
+  let matchesCurrentDay = await MController.getLatestByTime(time);
 
   if (matchesCurrentDay.length !== 0) {
     matchesCurrentDay = matchesCurrentDay.map((match) => match.matchId);
   }
   console.log(
     chalk.green(
-      `Getting matches after ${new Date(time * 1000).toLocaleString()} from GMT-0`
+      `Getting matches after ${new Date(timeUnix * 1000).toLocaleString()}`
     )
   );
 
@@ -92,7 +94,7 @@ const watcher = async () => {
       leagues.tier = 'premium'
       OR leagues.leagueid = 15475
     ) AND (
-      matches.start_time >= ${time}
+      matches.start_time >= ${timeUnix}
       AND
       matches.match_id NOT IN (${matchesCurrentDay})
     ) AND

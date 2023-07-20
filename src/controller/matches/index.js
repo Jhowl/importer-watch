@@ -39,10 +39,10 @@ class MatchesController extends Controller {
     return response[0].matchId
   }
 
-  async getMatchesLastTreeHours() {
+  async getLatestByTime(time) {
     const response = await this.Model.find({
       startTime: {
-        $gte: new Date(new Date().getTime() - 60 * 60 * 3 * 1000)
+        $gte: new Date(new Date().getTime() - time * 1000)
       }
     })
 
