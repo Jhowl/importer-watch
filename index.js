@@ -73,16 +73,30 @@ const makeFirstImport = async () => {
 };
 
 const watcher = async () => {
-  const lastMatchId = await MController.getLatestMatchId();
+  let matchesCurrentDay = await MController.getMatchesLastTreeHours();
+  const time = Math.floor( new Date().getTime() / 1000 ) - 60 * 60 * 3; // 3.5 hours
+
+  if (matchesCurrentDay.length !== 0) {
+    matchesCurrentDay = matchesCurrentDay.map((match) => match.matchId);
+  }
+  console.log(
+    chalk.green(
+      `Getting matches after ${new Date(time * 1000).toLocaleString()} from GMT-0`
+    )
+  );
 
   logger.info("Checking for new matches...");
-  console.log(chalk.yellow("Last match id: " + lastMatchId));
 
   const where = `
     (
       leagues.tier = 'premium'
       OR leagues.leagueid = 15475
-    ) AND matches.match_id > ${lastMatchId}
+    ) AND (
+      matches.start_time >= ${time}
+      AND
+      matches.match_id NOT IN (${matchesCurrentDay})
+    ) AND
+    EXTRACT(YEAR FROM to_timestamp(matches.start_time)) >= 2023
   `;
 
   const query = `

@@ -41,8 +41,6 @@ class TeamsController extends Controller {
     return response
   }
 
-
-
   async getTeamsData(teamsIds) {
     const query =`
       SELECT
@@ -69,13 +67,6 @@ class TeamsController extends Controller {
     return formatedTeams
   }
 
-  async getLatestMatchId() {
-    const response = await this.getLatest()
-
-    if (response.length === 0) return 0
-
-    return response[0].matchId
-  }
 }
 
 export default TeamsController

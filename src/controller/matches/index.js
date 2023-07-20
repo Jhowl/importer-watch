@@ -12,15 +12,41 @@ class MatchesController extends Controller {
   }
 
   async saveMatches(matches) {
+    const matchNotInDB = await this.ValidateMatchsIsInDB(matches)
+    if (matchNotInDB.length === 0) return false
+
     const formatedMatches = matches.map(match => formatMatch(match))
+
     const response = await this.insertMany(formatedMatches)
     return response
+  }
+
+  async getMatchesNotInDB(matches) {
+    const matchIds = matches.map(match => match.matchId)
+    const response = await this.Model.find({ matchId: { $in: matchIds } })
+
+    const newMatches = matches.filter(match => {
+      const matchInDB = response.find(m => m.matchId === match.matchId)
+      return !matchInDB
+    })
+
+    return newMatches
   }
 
   async getLatestMatchId() {
     const response = await this.getLatest()
     if (response.length === 0) return 0
     return response[0].matchId
+  }
+
+  async getMatchesLastTreeHours() {
+    const response = await this.Model.find({
+      startTime: {
+        $gte: new Date(new Date().getTime() - 60 * 60 * 3 * 1000)
+      }
+    })
+
+    return response
   }
 }
 
