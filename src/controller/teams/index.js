@@ -30,7 +30,6 @@ class TeamsController extends Controller {
     const teams = teamsIds.reduce((acc, teamId) => {
         const team = this.find({ teamId })
         if (team.length === 0) acc.push(teamId)
-        console.log('team Already exists')
         return acc
       }, [])
 

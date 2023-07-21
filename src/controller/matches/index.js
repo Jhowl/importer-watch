@@ -42,11 +42,15 @@ class MatchesController extends Controller {
   async getLatestByTime(time) {
     const response = await this.Model.find({
       startTime: {
-        $gte: new Date(new Date().getTime() - time * 1000)
+        $gte: new Date(new Date().getTime() - time)
       }
     })
 
-    return response
+    if (response.length === 0) return []
+
+    const matchIds = response.map(({ matchId }) => matchId)
+
+    return matchIds
   }
 }
 

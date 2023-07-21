@@ -74,20 +74,22 @@ const makeFirstImport = async () => {
 };
 
 const watcher = async () => {
-  const timeInHours = 15;
-  // const timeInMilliseconds = timeInHours * 60 * 60 * 1000;
+  const timeInHours = 5;
+  const timeInMilliseconds = timeInHours * 60 * 60 * 1000;
   const timeUnix = Math.floor(new Date().getTime() / 1000) - timeInHours * 60 * 60;
-  const matchesCurrentDay = await MController.getLatestByTime(timeInHours);
+  const matchesByTime = await MController.getLatestByTime(timeInMilliseconds);
+
   const whereClause = `
     (
       leagues.tier = 'premium'
       OR leagues.leagueid = 15475
     ) AND (
       matches.start_time >= ${timeUnix}
-      ${matchesCurrentDay.length > 0 ? `AND matches.match_id NOT IN (${matchesCurrentDay.join(',')})` : ''}
+      ${matchesByTime.length > 0 ? `AND matches.match_id NOT IN (${matchesByTime.join(',')})` : ''}
     ) AND
     EXTRACT(YEAR FROM to_timestamp(matches.start_time)) >= 2023
-  `;
+  `
+
   const query = `
     SELECT
       ${select}
@@ -97,7 +99,9 @@ const watcher = async () => {
       ${whereClause}
     GROUP BY
       ${groupBy}
-  `;
+  `
+
+  console.log(query)
 
   console.log(chalk.green(`Getting matches after ${new Date(timeUnix * 1000).toLocaleString()}`));
   logger.info("Checking for new matches...");
@@ -120,7 +124,7 @@ const watcher = async () => {
 
     logger.info(`Matches found ${matches.length}`);
 
-    const newMatches = matches.filter(({ match_id: matchId }) => !matchesCurrentDay.includes(matchId));
+    const newMatches = matches.filter(({ match_id: matchId }) => !matchesByTime.includes(matchId));
     const newMatchesIds = newMatches.map(({ match_id: matchId }) => matchId);
 
     await Promise.all([
