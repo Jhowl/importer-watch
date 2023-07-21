@@ -31,6 +31,7 @@ const makeFirstImport = async () => {
     leagues.tier = 'premium'
     OR leagues.leagueid = 15196
     OR leagues.leagueid = 15439
+    OR leagues.leagueid = 15475
   ) AND
   EXTRACT(YEAR FROM to_timestamp(matches.start_time)) >= 2023`;
 
@@ -138,8 +139,8 @@ const watcher = async () => {
 };
 
 const start = async () => {
-  // await makeFirstImport();
-    await watcher();
+  await makeFirstImport();
+  await watcher();
 
   console.log(chalk.green("Starting watcher..."));
 

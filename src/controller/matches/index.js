@@ -15,18 +15,18 @@ class MatchesController extends Controller {
     const matchNotInDB = await this.getMatchesNotInDB(matches)
     if (matchNotInDB.length === 0) return false
 
-    const formatedMatches = matches.map(match => formatMatch(match))
+    const formatedMatches = matchNotInDB.map(match => formatMatch(match))
 
     const response = await this.insertMany(formatedMatches)
     return response
   }
 
   async getMatchesNotInDB(matches) {
-    const matchIds = matches.map(match => match.matchId)
+    const matchIds = matches.map(match => match.match_id)
     const response = await this.Model.find({ matchId: { $in: matchIds } })
 
     const newMatches = matches.filter(match => {
-      const matchInDB = response.find(m => m.matchId === match.matchId)
+      const matchInDB = response.find(m => m.matchId === match.match_id)
       return !matchInDB
     })
 
