@@ -73,76 +73,66 @@ const makeFirstImport = async () => {
 };
 
 const watcher = async () => {
-  const time = 60 * 60 * 12
-  const timeUnix = Math.floor( new Date().getTime() / 1000 ) - time;
-
-  let matchesCurrentDay = await MController.getLatestByTime(time);
-
-  if (matchesCurrentDay.length !== 0) {
-    matchesCurrentDay = matchesCurrentDay.map((match) => match.matchId);
-  }
-  console.log(
-    chalk.green(
-      `Getting matches after ${new Date(timeUnix * 1000).toLocaleString()}`
-    )
-  );
-
-  logger.info("Checking for new matches...");
-
-  const where = `
+  const timeInHours = 15;
+  // const timeInMilliseconds = timeInHours * 60 * 60 * 1000;
+  const timeUnix = Math.floor(new Date().getTime() / 1000) - timeInHours * 60 * 60;
+  const matchesCurrentDay = await MController.getLatestByTime(timeInHours);
+  const whereClause = `
     (
       leagues.tier = 'premium'
       OR leagues.leagueid = 15475
     ) AND (
       matches.start_time >= ${timeUnix}
-      AND
-      matches.match_id NOT IN (${matchesCurrentDay})
+      ${matchesCurrentDay.length > 0 ? `AND matches.match_id NOT IN (${matchesCurrentDay.join(',')})` : ''}
     ) AND
     EXTRACT(YEAR FROM to_timestamp(matches.start_time)) >= 2023
   `;
-
   const query = `
     SELECT
       ${select}
     FROM
       ${from}
     WHERE
-      ${where}
+      ${whereClause}
     GROUP BY
       ${groupBy}
   `;
 
+  console.log(chalk.green(`Getting matches after ${new Date(timeUnix * 1000).toLocaleString()}`));
+  logger.info("Checking for new matches...");
+
   try {
-    const response = await axios.get(
-      `https://api.opendota.com/api/explorer?sql=${encodeURIComponent(
-        query
-      )}`
-    );
+    const response = await axios.get(`https://api.opendota.com/api/explorer?sql=${encodeURIComponent(query)}`);
 
     if (response.status !== 200) {
       logger.warn("Error in watcher");
       return false;
     }
 
-    if (response.data.rows.length === 0) {
+    const { rows: matches } = response.data;
+
+    if (matches.length === 0) {
       console.log(chalk.yellow("No matches found"));
       console.log(chalk.yellow("Waiting 5 minutes..."));
-
       return false;
     }
 
-    logger.info(`Matches found ${response.data.rows.length}`);
+    logger.info(`Matches found ${matches.length}`);
+
+    const newMatches = matches.filter(({ match_id: matchId }) => !matchesCurrentDay.includes(matchId));
+    const newMatchesIds = newMatches.map(({ match_id: matchId }) => matchId);
 
     await Promise.all([
-      MController.saveMatches(response.data.rows),
-      LController.newLeague(response.data.rows),
-      TController.newTeam(response.data.rows),
+      MController.saveMatches(newMatches),
+      LController.newLeague(newMatches),
+      TController.newTeam(newMatches),
     ]);
 
     logger.info("Watcher saved");
+
+    return newMatchesIds;
   } catch (error) {
-    logger.error("Error in watcher");
-    console.log(error);
+    logger.error(`Error in watcher: ${error.message}`);
     return false;
   }
 };
