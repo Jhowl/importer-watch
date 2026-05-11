@@ -11,19 +11,19 @@ import MatchesController from "./src/controller/matches/index.js";
 import LeaguesController from "./src/controller/leagues/index.js";
 import TeamsController from "./src/controller/teams/index.js";
 
-const MController = new MatchesController();
-const LController = new LeaguesController();
-const TController = new TeamsController();
+// const MController = new MatchesController();
+// const LController = new LeaguesController();
+// const TController = new TeamsController();
 
 const makeFirstImport = async () => {
   logger.info("Make first import");
 
-  const mongoMatches = await MController.getLatest();
+  // const mongoMatches = await MController.getLatest();
 
-  if (mongoMatches.length !== 0) {
-    logger.info("First import already done");
-    return false;
-  }
+  // if (mongoMatches.length !== 0) {
+  //   logger.info("First import already done");
+  //   return false;
+  // }
 
   logger.info("First import started");
 
@@ -32,6 +32,9 @@ const makeFirstImport = async () => {
     OR leagues.leagueid = 15196
     OR leagues.leagueid = 15439
     OR leagues.leagueid = 15475
+    OR leagues.leagueid = 15551
+    OR leagues.leagueid = 15638
+    OR leagues.leagueid = 15739
   ) AND
   EXTRACT(YEAR FROM to_timestamp(matches.start_time)) >= 2023`;
 
@@ -47,6 +50,8 @@ const makeFirstImport = async () => {
     ORDER BY
       matches.match_id DESC
   `;
+  console.log(`https://api.opendota.com/api/explorer?sql=${encodeURIComponent(query)}`);
+
 
   try {
     const response = await axios.get(
@@ -55,119 +60,145 @@ const makeFirstImport = async () => {
       )}`
     );
 
-    if (response.status !== 200) {
-      logger.warn("Error in response");
-      return false;
-    }
+    // console.log(JSON.stringify(query, null, 2))
 
-    await Promise.all([
-      MController.saveMatches(response.data.rows),
-      LController.saveLeagues(response.data.rows),
-      TController.saveTeams(response.data.rows),
-    ]);
+    // if (response.status !== 200) {
+    //   logger.warn("Error in response");
+    //   return false;
+    // }
 
-    logger.info("First import saved");
+    // await Promise.all([
+    //   MController.saveMatches(response.data.rows),
+    //   LController.saveLeagues(response.data.rows),
+    //   TController.saveTeams(response.data.rows),
+    // ]);
+
+    // logger.info("First import saved");
+
+    // console.log(response.data.rows);
   } catch (error) {
+    console.log(chalk.red(error));
     logger.error(`Error in first import ${error.message}`);
     return false;
   }
 };
 
-const watcher = async () => {
-  const timeInHours = 5;
-  const timeInMilliseconds = timeInHours * 60 * 60 * 1000;
-  const timeUnix = Math.floor(new Date().getTime() / 1000) - timeInHours * 60 * 60;
-  const matchesByTime = await MController.getLatestByTime(timeInMilliseconds);
+// const watcher = async () => {
+//   const timeInHours = 15;
+//   const timeInMilliseconds = timeInHours * 60 * 60 * 1000;
+//   const timeUnix = Math.floor(new Date().getTime() / 1000) - timeInHours * 60 * 60;
+//   const matchesByTime = await MController.getLatestByTime(timeInMilliseconds);
+//   const lastMatchId = await MController.getLatestMatchId();
+//   console.log(lastMatchId);
+//   // console.log(matchesByTime);
 
-  const whereClause = `
-    (
-      leagues.tier = 'premium'
-      OR leagues.leagueid = 15475
-    ) AND (
-      matches.start_time >= ${timeUnix}
-      ${matchesByTime.length > 0 ? `AND matches.match_id NOT IN (${matchesByTime.join(',')})` : ''}
-    ) AND
-    EXTRACT(YEAR FROM to_timestamp(matches.start_time)) >= 2023
-  `
+//   //Get matches after time and not in matchesByTime using the curren time
+//   // const whereClause = `
+//   //   (
+//   //     leagues.tier = 'premium'
+//   //     OR leagues.leagueid = 15551
+//   //     OR leagues.leagueid = 15638
+//   //     OR leagues.leagueid = 15739
+//   //   ) AND (
+//   //     matches.start_time >= ${timeUnix}
+//   //     ${matchesByTime.length > 0 ? `AND matches.match_id NOT IN (${matchesByTime.join(',')})` : ''}
+//   //   ) AND
+//   //   EXTRACT(YEAR FROM to_timestamp(matches.start_time)) >= 2023
+//   // `
 
-  const query = `
-    SELECT
-      ${select}
-    FROM
-      ${from}
-    WHERE
-      ${whereClause}
-    GROUP BY
-      ${groupBy}
-  `
 
-  console.log(query)
+//   const whereClause = `
+//     (
+//       leagues.tier = 'premium'
+//       OR leagues.leagueid = 15551
+//       OR leagues.leagueid = 15638
+//       OR leagues.leagueid = 15739
+//     ) AND (
+//       matches.match_id > ${lastMatchId}
+//     ) AND
+//     EXTRACT(YEAR FROM to_timestamp(matches.start_time)) >= 2023
+//   `
 
-  console.log(chalk.green(`Getting matches after ${new Date(timeUnix * 1000).toLocaleString()}`));
-  logger.info("Checking for new matches...");
+//   const query = `
+//     SELECT
+//       ${select}
+//     FROM
+//       ${from}
+//     WHERE
+//       ${whereClause}
+//     GROUP BY
+//       ${groupBy}
+//   `
+//   // console.log(query);
 
-  try {
-    const response = await axios.get(`https://api.opendota.com/api/explorer?sql=${encodeURIComponent(query)}`);
+//   console.log(chalk.green(`Getting matches after ${new Date(timeUnix * 1000).toLocaleString()}`));
+//   logger.info("Checking for new matches...");
 
-    if (response.status !== 200) {
-      logger.warn("Error in watcher");
-      return false;
-    }
+//   try {
+//     console.log(`https://api.opendota.com/api/explorer?sql=${encodeURIComponent(query)}`);
+//     const response = await axios.get(`https://api.opendota.com/api/explorer?sql=${encodeURIComponent(query)}`);
 
-    const { rows: matches } = response.data;
+//     if (response.status !== 200) {
+//       logger.warn("Error in watcher");
+//       return false;
+//     }
 
-    if (matches.length === 0) {
-      console.log(chalk.yellow("No matches found"));
-      console.log(chalk.yellow("Waiting 5 minutes..."));
-      return false;
-    }
+//     const { rows: matches } = response.data;
 
-    logger.info(`Matches found ${matches.length}`);
+//     if (matches.length === 0) {
+//       console.log(chalk.yellow("No matches found"));
+//       console.log(chalk.yellow("Waiting 10 minutes..."));
+//       return false;
+//     }
 
-    const newMatches = matches.filter(({ match_id: matchId }) => !matchesByTime.includes(matchId));
-    const newMatchesIds = newMatches.map(({ match_id: matchId }) => matchId);
+//     logger.info(`Matches found ${matches.length}`);
 
-    await Promise.all([
-      MController.saveMatches(newMatches),
-      LController.newLeague(newMatches),
-      TController.newTeam(newMatches),
-    ]);
+//     const newMatches = matches.filter(({ match_id: matchId }) => !matchesByTime.includes(matchId));
+//     const newMatchesIds = newMatches.map(({ match_id: matchId }) => matchId);
 
-    logger.info("Watcher saved");
+//     await Promise.all([
+//       MController.saveMatches(newMatches),
+//       LController.newLeague(newMatches),
+//       TController.newTeam(newMatches),
+//     ]);
 
-    return newMatchesIds;
-  } catch (error) {
-    logger.error(`Error in watcher: ${error.message}`);
-    return false;
-  }
-};
+//     logger.info("Watcher saved");
 
-const start = async () => {
+//     return newMatchesIds;
+//   } catch (error) {
+//     console.log(chalk.red(error));
+//     logger.error(`Error in watcher: ${error.message}`);
+//     return false;
+//   }
+// };
+
+// const start = async () => {
   await makeFirstImport();
-  await watcher();
+//   await watcher();
 
-  console.log(chalk.green("Starting watcher..."));
+//   console.log(chalk.green("Starting watcher..."));
 
-  setInterval(async () => {
-    await watcher();
-  }, 60 * 1000 * 5);
-};
+//   setInterval(async () => {
+//     await watcher();
+//   }, 60 * 1000 * 10);
+// };
 
-const api = axios.create({
-  baseURL: "https://api.opendota.com/api",
-});
+// const api = axios.create({
+//   baseURL: "https://api.opendota.com/api",
+// });
 
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    logger.error(`Error in API request: ${error.message}`);
-    return Promise.reject(error);
-  }
-);
 
-db.then(() => {
-  logger.info("Connected to database");
-  start();
-}).catch((err) => {
-  logger.error(err);
-});
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     logger.error(`Error in API request: ${error.message}`);
+//     return Promise.reject(error);
+//   }
+// );
+
+// db.then(() => {
+//   logger.info("Connected to database");
+//   start();
+// }).catch((err) => {
+//   logger.error(err);
+// });
